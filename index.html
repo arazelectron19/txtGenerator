@@ -1,126 +1,207 @@
-
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>abrir envelope</title>
-</head>
-<style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Text File</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
     * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box; 
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Fredoka One', sans-serif;
     }
-     /* body centraliza tudo, cor preta e tela inteira */
+
     body {
-        width: 100vw;
-        height: 100vh;
-        background: rgb(0, 0, 0); 
-        justify-content: center;
-        align-items: center;
-        display: flex;
-    }
-    /* base do envelope, centralizada na tela */
-    .base {
-        width: 300px;
-        height: 210px;
-        background: #f5f5dc; 
-        border-radius: 5px;
-        position: relative;
-        border: 1px solid #d3d3d3; 
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-    }
-    /* primeira dobra, usamos o clip-path com uma div para cortar o formato do envelope e o z-index para ajustar a posição z na tela */
-    .dobra1 {
-        background: rgba(200, 200, 200, 0.8); 
-        position: relative;
-        top: -60px;
-        left: 0;
-        width: 300px;
-        height: 130px;
-        clip-path: polygon(50% 0%, 2% 90%, 0% 100%, 100% 100%, 98% 90%);
-        z-index: 2;
-        border: 1px solid #c0c0c0; 
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); 
-    }
-    /* quando passar o mouse sobre a base, faça a animação para a dobra 2 em 0.01s para parecer que nao se movimentou no eixo Y */
-    .base:hover .dobra2 {
-        animation: open-envelope 0.01s linear forwards;
-    }
-    /* em paralelo a  dobra2, faça a animação para a carta dentro, mude a posição z, deixe visivel e espere um pouco parado depois va para cima*/
-    .base:hover .conteudo-dentro {
-        visibility: visible;
-        z-index: 4;
-        animation: check-message 2s linear forwards;
-    }
-    /* animação check-message */
-    @keyframes check-message {
-        0% {
-            transform: translateY(0);
-        }
-        50% {
-            transform: translateY(0);
-        }
-        90% {
-            transform: translateY(-50px);
-        }
-        100% {
-            transform: translateY(-60px);
-        }
-    }
-    /* animação open-envelope */
-    @keyframes open-envelope {
-        0% {
-            transform: rotateX(180deg) translateY(0);
-        }
-        100% {
-            transform: rotateX(0) translateY(-120px);
-        }
-    }
-    /* dobra 2 com z-index abaixo da dobra1 */
-    .dobra2 {
-        background: #e0d8c3; 
-        position: relative;
-        left: 0;
-        width: 300px;
-        bottom: 270px;
-        height: 130px;
-        transform: rotate(180deg);
-        clip-path: polygon(50% 0%, 2% 90%, 0% 100%, 100% 100%, 98% 90%);
-        z-index: 3;
-        border: 1px solid #b0a68c; 
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2); 
+      background: #0d0d0d;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
     }
 
-    /* carta dentro */
-    .conteudo-dentro {
-        background: #fff8e1; 
-        border-radius: 10px;
-        text-align: center;
-        justify-self: center;
-        justify-items: center;
-        padding-top: 30px;
-        margin-top: 10px;
-        top: 0;
-        position: relative;
-        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-        left: 0;
-        width: 270px;
-        height: 130px;
-        visibility: hidden;
-        z-index: 1;
-        border: 1px solid #d4c8a6; 
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1); 
+    .header {
+      font-size: 32px;
+      margin-bottom: 24px;
+      color: #00ffb3;
+      text-shadow: 0 0 5px #00ffb3aa;
     }
-</style>
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.65);
+      padding: 24px;
+      border-radius: 20px;
+      border: 1px solid rgba(0, 255, 128, 0.2);
+      backdrop-filter: blur(12px);
+      width: 600px;
+      box-shadow: 0 0 18px rgba(0, 255, 128, 0.1);
+    }
+
+    .input-text {
+      width: 100%;
+      height: 150px;
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 255, 128, 0.3);
+      color: #e0ffe6;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 20px;
+      resize: none;
+    }
+
+    .char-count {
+      font-size: 12px;
+      text-align: right;
+      color: #b5bac1;
+      margin-top: -16px;
+      margin-bottom: 20px;
+    }
+
+    .dropdown {
+      position: relative;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .dropdown-btn {
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 255, 128, 0.3);
+      color: #e0ffe6;
+      padding: 12px;
+      width: 100%;
+      border-radius: 12px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .dropdown-btn i {
+      color: #00ff80;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      bottom: 60px;
+      background-color: #1a1a1a;
+      border: 1px solid rgba(0, 255, 128, 0.2);
+      width: 100%;
+      border-radius: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 2;
+      box-shadow: 0 0 8px rgba(0, 255, 128, 0.2);
+    }
+
+    .dropdown-content div {
+      padding: 10px;
+      cursor: pointer;
+      color: #e0ffe6;
+      transition: 0.2s;
+    }
+
+    .dropdown-content div:hover {
+      background-color: rgba(0, 255, 128, 0.1);
+    }
+
+    .download-button {
+      background-color: rgba(0, 255, 128, 0.25);
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+      transition: 0.3s ease;
+    }
+
+    .download-button:hover {
+      background-color: rgba(0, 255, 128, 0.4);
+    }
+  </style>
+</head>
 <body>
+  <div class="header"><i class="fas fa-file-alt"></i> Text File Generator</div>
 
-    <!-- Estrutura do HTML-->
-    <div class="base">
-        <div class="conteudo-dentro">ABRIR ENVELOPE</div>
-        <div class="dobra1"></div>
-        <div class="dobra2"></div>
+  <div class="container">
+    <input class="input-text" placeholder="Enter your text here..." maxlength="6000" oninput="upchrcnt()" />
+    <div class="char-count" id="chrcnt">0 / 6000</div>
+
+    <div class="dropdown">
+      <div class="dropdown-btn" onclick="showform()" id="selform">
+        .txt <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="dropdown-content" id="formopts">
+        <div onclick="setform('txt')">.txt</div>
+        <div onclick="setform('lua')">.lua</div>
+        <div onclick="setform('html')">.html</div>
+        <div onclick="setform('py')">.py</div>
+        <div onclick="setform('json')">.json</div>
+        <div onclick="setform('md')">.md</div>
+        <div onclick="setform('css')">.css</div>
+        <div onclick="setform('js')">.js</div>
+        <div onclick="setform('xml')">.xml</div>
+        <div onclick="setform('csv')">.csv</div>
+        <div onclick="setform('java')">.java</div>
+        <div onclick="setform('php')">.php</div>
+        <div onclick="setform('cpp')">.cpp</div>
+      </div>
     </div>
+
+    <button class="download-button" onclick="dlfile()"><i class="fas fa-download"></i> Download Text File</button>
+  </div>
+
+  <script>
+    let fileform = 'txt';
+
+    function showform() {
+      const box = document.getElementById('formopts');
+      box.style.display = box.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function setform(ext) {
+      fileform = ext;
+      document.getElementById('selform').innerHTML = `.${ext} <i class="fas fa-chevron-down"></i>`;
+      document.getElementById('formopts').style.display = 'none';
+    }
+
+    function upchrcnt() {
+      const box = document.querySelector('.input-text');
+      const cnt = document.getElementById('chrcnt');
+      cnt.textContent = `${box.value.length} / 6000`;
+    }
+
+    function dlfile() {
+      const txt = document.querySelector('.input-text').value;
+
+      if (!txt) {
+        alert("Please enter some text before downloading!");
+        return;
+      }
+
+      const blob = new Blob([txt], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `file.${fileform}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    window.onclick = function (e) {
+      if (!e.target.closest('.dropdown')) {
+        document.getElementById('formopts').style.display = 'none';
+      }
+    }
+  </script>
 </body>
-</html>            
+</html>
+            
